@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- --- SEO & META TAGS --- -->
+  <title>CyberSpeed - ประสบการณ์เช็คความเร็วเน็ตที่ล้ำสมัยที่สุด</title>
+  <meta name="description" content="สัมผัสประสบการณ์การวัดความเร็วอินเทอร์เน็ตแบบใหม่ด้วย CyberSpeed วิเคราะห์ Ping, Download, Upload ด้วยดีไซน์ล้ำอนาคต">
+  <meta name="keywords" content="เช็คความเร็วเน็ต, วัดความเร็วเน็ต, speed test, futuristic speed test">
+  
+  <!-- Google Fonts: เพิ่ม Prompt สำหรับภาษาไทยยอดนิยม -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Share+Tech+Mono&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --neon-cyan: #00f3ff;
+      --neon-purple: #bc13fe;
+      --neon-pink: #ff0055;
+      --neon-gold: #ffcc00;
+      --dark-bg: #020204;
+      --glass-bg: rgba(10, 12, 18, 0.85);
+      --glass-border: rgba(0, 243, 255, 0.2);
+    }
+
+    * { box-sizing: border-box; outline: none; }
+    
+    body, html {
+      margin: 0; padding: 0;
+      background-color: var(--dark-bg);
+      color: #fff;
+      /* ใช้ Rajdhani สำหรับภาษาอังกฤษ และ Prompt สำหรับภาษาไทย */
+      font-family: 'Rajdhani', 'Prompt', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* --- BACKGROUND MOTION: DIGITAL PARTICLES --- */
+    #bg-canvas {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 1; opacity: 0.4; pointer-events: none;
+    }
+
+    .background-grid {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      transform: perspective(500px) rotateX(60deg) translateY(0);
+      animation: gridScroll 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes gridScroll {
+      from { transform: perspective(500px) rotateX(60deg) translateY(0); }
+      to { transform: perspective(500px) rotateX(60deg) translateY(40px); }
+    }
+
+    /* --- LAYOUT --- */
+    .wrapper {
+      position: relative; z-index: 10;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 40px 20px;
+    }
+
+    /* Ad Slot */
+    .ad-banner {
+      width: 100%; max-width: 728px; min-height: 90px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed #333; margin: 20px 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #333; font-size: 0.7rem; letter-spacing: 2px;
+      backdrop-filter: blur(5px); border-radius: 8px;
+    }
+
+    /* --- MAIN PANEL: GLASSMORPHISM --- */
+    .main-panel {
+      width: 100%; max-width: 500px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 30px; padding: 50px 40px;
+      backdrop-filter: blur(25px);
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 243, 255, 0.05);
+      position: relative; overflow: hidden;
+      animation: panelFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes panelFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .main-panel::before {
+      content: ""; position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: conic-gradient(transparent, var(--neon-cyan), transparent 30%);
+      animation: borderRotate 10s linear infinite;
+      z-index: -1; opacity: 0.2;
+    }
+
+    @keyframes borderRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* --- LOGO & TITLE --- */
+    header h1 {
+      font-family: 'Orbitron', sans-serif; font-size: 1.5rem;
+      letter-spacing: 8px; color: #fff; margin: 0;
+      text-transform: uppercase; position: relative;
+    }
+
+    .glitch-text {
+      animation: glitch 3s infinite;
+      color: var(--neon-cyan);
+      text-shadow: 2px 0 var(--neon-pink), -2px 0 var(--neon-purple);
+    }
+
+    @keyframes glitch {
+      0% { transform: skew(0); }
+      20% { transform: skew(-1deg); }
+      21% { transform: skew(5deg); }
+      22% { transform: skew(0); }
+      80% { transform: skew(0); }
+      81% { transform: skew(-5deg); }
+      82% { transform: skew(0); }
+    }
+
+    /* --- GAUGE AREA --- */
+    .gauge-container {
+      position: relative; width: 260px; height: 260px;
+      margin: 40px auto; display: flex; justify-content: center; align-items: center;
+    }
+
+    .gauge-svg { position: absolute; width: 100%; height: 100%; transform: rotate(-90deg); }
+    .track { fill: none; stroke: rgba(255, 255, 255, 0.03); stroke-width: 6; }
+    .progress-bar {
+      fill: none; stroke-width: 10; stroke-linecap: round;
+      stroke-dasharray: 628; stroke-dashoffset: 628;
+      transition: stroke-dashoffset 0.8s cubic-bezier(0.1, 0.5, 0.5, 1), stroke 0.6s ease;
+      filter: drop-shadow(0 0 12px currentColor);
+    }
+
+    .scan-ray {
+      position: absolute; width: 50%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan));
+      left: 50%; top: 50%; transform-origin: left center;
+      animation: radarScan 4s linear infinite;
+      opacity: 0; pointer-events: none;
+    }
+
+    @keyframes radarScan {
+      from { transform: rotate(0deg); opacity: 0.5; }
+      to { transform: rotate(360deg); opacity: 0.5; }
+    }
+
+    #speed-display {
+      font-family: 'Orbitron', sans-serif; font-size: 4.5rem; font-weight: 900;
+      margin: 0; line-height: 1; transition: 0.3s;
+    }
+
+    .unit-tag { font-size: 1rem; color: #666; letter-spacing: 4px; font-weight: bold; margin-top: 5px; }
+
+    /* --- STATS CARDS --- */
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 40px; }
+    .stat-card {
+      background: rgba(0, 0, 0, 0.4); padding: 18px 5px; border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.4s;
+      position: relative; overflow: hidden;
+    }
+
+    .stat-card::after {
+      content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      opacity: 0; transition: 0.4s;
+    }
+
+    .stat-card:hover { border-color: var(--neon-cyan); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+    .stat-card:hover::after { opacity: 1; }
+
+    .stat-card.active { border-color: var(--neon-purple); animation: pulseCard 1s infinite alternate; }
+    @keyframes pulseCard { from { box-shadow: 0 0 5px var(--neon-purple); } to { box-shadow: 0 0 15px var(--neon-purple); } }
+
+    .stat-card .label { font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .stat-card .value { font-family: 'Share Tech Mono', monospace; font-size: 1.3rem; color: #fff; }
+
+    /* --- ACTION BUTTON --- */
+    .btn-container { margin-top: 40px; width: 100%; }
+    .scanner-btn {
+      width: 100%; padding: 22px; background: transparent;
+      border: 1px solid var(--neon-cyan); color: var(--neon-cyan);
+      font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: bold;
+      letter-spacing: 3px; cursor: pointer; border-radius: 12px;
+      transition: 0.4s; position: relative; overflow: hidden;
+    }
+
+    .scanner-btn:hover:not(:disabled) {
+      background: var(--neon-cyan); color: #000;
+      box-shadow: 0 0 40px var(--neon-cyan);
+    }
+
+    .scanner-btn:disabled { opacity: 0.4; filter: grayscale(1); cursor: wait; }
+
+    /* --- SEO CONTENT --- */
+    .article-wrap {
+      max-width: 850px; margin: 80px auto; padding: 0 20px;
+      line-height: 1.9; color: #999; text-align: justify;
+      /* บังคับใช้ Prompt สำหรับบทความเพื่อให้อ่านง่าย */
+      font-family: 'Prompt', sans-serif;
+    }
+    .article-wrap h2 { 
+      color: var(--neon-cyan); 
+      font-family: 'Orbitron', 'Prompt', sans-serif; 
+      margin-top: 50px; 
+      font-weight: 500;
+    }
+    .article-wrap b { color: #fff; font-weight: 500; }
+
+    /* --- FOOTER & VISITOR COUNTER --- */
+    footer {
+      width: 100%; padding: 60px 0 40px; border-top: 1px dotted #333;
+      text-align: center; font-size: 0.85rem; color: #444;
+      display: flex; flex-direction: column; align-items: center;
+      font-family: 'Prompt', sans-serif;
+    }
+    footer a { color: #666; text-decoration: none; margin: 0 15px; transition: 0.3s; }
+    footer a:hover { color: var(--neon-cyan); }
+
+    .visitor-container {
+      margin-top: 30px;
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .visitor-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--neon-purple);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+
+    .counter-digits {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.4rem;
+      color: var(--neon-cyan);
+      background: #000;
+      padding: 5px 15px;
+      border-radius: 4px;
+      border: 1px inset rgba(0, 243, 255, 0.2);
+      box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.1), 0 0 5px rgba(0, 243, 255, 0.2);
+      letter-spacing: 4px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <canvas id="bg-canvas"></canvas>
+  <div class="background-grid"></div>
+
+  <div class="wrapper">
+    <!-- Ad Space Top -->
+    <div class="ad-banner">ADSENSE_LEADERBOARD_TOP</div>
+
+    <main class="main-panel">
+      <header>
+          <h1 class="glitch-text">CYBERSPEED v2.0</h1>
+          <p style="font-size: 0.7rem; color: #4ecdc4; letter-spacing: 3px; margin: 5px 0 0; font-family: 'Share Tech Mono', monospace;">SYSTEM DIAGNOSTICS ACTIVE</p>
+      </header>
+
+      <div class="gauge-container">
+        <div class="scan-ray" id="scanner"></div>
+        <svg class="gauge-svg" viewBox="0 0 220 220">
+          <circle class="track" cx="110" cy="110" r="100"></circle>
+          <circle id="gauge-fill" class="progress-bar" cx="110" cy="110" r="100" stroke="var(--neon-cyan)"></circle>
+        </svg>
+        <div style="z-index: 10; text-align: center;">
+          <p id="speed-display">00</p>
+          <div class="unit-tag">MBPS</div>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card" id="card-ping">
+          <div class="label">Latency</div>
+          <div class="value" id="val-ping">---</div>
+        </div>
+        <div class="stat-card" id="card-dl">
+          <div class="label">Downlink</div>
+          <div class="value" id="val-dl">---</div>
+        </div>
+        <div class="stat-card" id="card-ul">
+          <div class="label">Uplink</div>
+          <div class="value" id="val-ul">---</div>
+        </div>
+      </div>
+
+      <div class="btn-container">
+        <button class="scanner-btn" id="run-btn" onclick="initTest()">INITIALIZE SCANNER</button>
+      </div>
+
+      <div id="log-console" style="margin-top: 25px; font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: #4ecdc4; min-height: 1.2rem;">
+        READY FOR INPUT...
+      </div>
+    </main>
+
+    <!-- Ad Space Middle -->
+    <div class="ad-banner">ADSENSE_RESPONSIVE_MIDDLE</div>
+
+    <!-- SEO & ADSENSE CONTENT -->
+    <article class="article-wrap">
+      <h2>วิวัฒนาการใหม่ของการวัดความเร็วอินเทอร์เน็ต</h2>
+      <p>ในโลกที่ขับเคลื่อนด้วยข้อมูล <b>CyberSpeed</b> เข้าใจดีว่าความเร็วไม่ใช่แค่ตัวเลข แต่มันคือประสบการณ์การใช้งานที่ไร้รอยต่อ เรานำเสนอแพลตฟอร์มการวิเคราะห์ประสิทธิภาพเครือข่ายที่แม่นยำที่สุด รองรับทั้ง <b>WiFi 6, 5G</b> และเทคโนโลยี <b>Fiber Optic</b> ความเร็วสูง</p>
+      
+      <h2>ค่าความหน่วง (Latency) สำคัญอย่างไร?</h2>
+      <p>สำหรับเหล่านักเล่นเกม (Gamers) และผู้ใช้งานวิดีโอคอล ค่า <b>Ping</b> หรือความหน่วงคือหัวใจสำคัญ หากค่านี้สูงเกินไปจะทำให้เกิดอาการแล็ก (Lag) การทดสอบของเราช่วยให้คุณรู้ทันประสิทธิภาพของการเชื่อมต่อแบบเรียลไทม์ เพื่อให้คุณสามารถแก้ไขปัญหาได้อย่างตรงจุด</p>
+
+      <h2>เทคนิคการทดสอบให้แม่นยำที่สุด</h2>
+      <p>เพื่อให้ได้ผลการทดสอบความเร็วที่ใกล้เคียงความจริงมากที่สุด เราขอแนะนำให้ปิดโปรแกรมที่ไม่จำเป็นที่ใช้แบนด์วิดท์ในพื้นหลัง และหากเป็นไปได้ควรเชื่อมต่อผ่านสาย LAN เพื่อลดสัญญาณรบกวนจากภายนอก</p>
+    </article>
+
+    <footer>
+      <div style="margin-bottom: 25px;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact Us</a>
+      </div>
+      
+      <!-- VISITOR COUNTER COMPONENT -->
+      <div class="visitor-container">
+        <span class="visitor-label">Global Access Counter</span>
+        <div class="counter-digits" id="visitor-count">000428</div>
+      </div>
+
+      <p style="margin-top: 25px;">&copy; 2024 CyberSpeed Labs. Precision Network Intelligence.</p>
+    </footer>
+  </div>
+
+  <script>
+    // --- PARTICLE BACKGROUND SCRIPT ---
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor() {
+        this.init();
+      }
+      init() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = (Math.random() - 0.5) * 1.5;
+        this.speedY = (Math.random() - 0.5) * 1.5;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x > canvas.width || this.x < 0) this.init();
+        if (this.y > canvas.height || this.y < 0) this.init();
+      }
+      draw() {
+        ctx.fillStyle = '#00f3ff';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 50; i++) particles.push(new Particle());
+
+    function animateBg() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateBg);
+    }
+    animateBg();
+
+    // --- VISITOR COUNTER LOGIC ---
+    function initVisitorCounter() {
+      const counterEl = document.getElementById('visitor-count');
+      let baseCount = 124500; 
+      let localCount = localStorage.getItem('cyberspeed_visitors');
+      if (!localCount) {
+          localCount = baseCount + Math.floor(Math.random() * 500);
+      } else {
+          localCount = parseInt(localCount) + 1;
+      }
+      localStorage.setItem('cyberspeed_visitors', localCount);
+      counterEl.innerText = localCount.toString().padStart(6, '0');
+    }
+
+    // --- SPEED TEST LOGIC ---
+    const CIRCUM = 628;
+    function updateGauge(mbps) {
+      const fill = document.getElementById('gauge-fill');
+      const text = document.getElementById('speed-display');
+      const percent = Math.min(mbps / 100, 1);
+      
+      fill.style.strokeDashoffset = CIRCUM - (percent * CIRCUM);
+      text.innerText = Math.floor(mbps);
+
+      let color = 'var(--neon-pink)';
+      if (mbps >= 15) color = 'var(--neon-gold)';
+      if (mbps >= 45) color = 'var(--neon-cyan)';
+      if (mbps >= 85) color = 'var(--neon-purple)';
+      
+      fill.style.stroke = color;
+      text.style.color = color;
+    }
+
+    async function initTest() {
+      const btn = document.getElementById('run-btn');
+      const log = document.getElementById('log-console');
+      const ray = document.getElementById('scanner');
+      const valNodes = {
+        ping: document.getElementById('val-ping'),
+        dl: document.getElementById('val-dl'),
+        ul: document.getElementById('val-ul')
+      };
+      const cardNodes = {
+        ping: document.getElementById('card-ping'),
+        dl: document.getElementById('card-dl'),
+        ul: document.getElementById('card-ul')
+      };
+
+      btn.disabled = true;
+      btn.innerText = "EXECUTING...";
+      updateGauge(0);
+      ray.style.opacity = "0.5";
+      Object.values(valNodes).forEach(n => n.innerText = "---");
+
+      try {
+        log.innerText = "> SYNCING LATENCY CHUNKS...";
+        cardNodes.ping.classList.add('active');
+        const pings = [];
+        for(let i=0; i<4; i++) {
+            const s = performance.now();
+            await fetch('https://www.google.com/favicon.ico', { mode: 'no-cors', cache: 'no-cache' });
+            pings.push(performance.now() - s);
+            await new Promise(r => setTimeout(r, 100));
+        }
+        valNodes.ping.innerText = Math.floor(pings.reduce((a,b)=>a+b)/4) + " ms";
+        cardNodes.ping.classList.remove('active');
+
+        log.innerText = "> STREAMING DOWNLOAD PAYLOAD (10MB)...";
+        cardNodes.dl.classList.add('active');
+        const dlUrl = `https://eu.httpbin.org/bytes/10000000?cache=${Date.now()}`;
+        const start = performance.now();
+        const response = await fetch(dlUrl);
+        const reader = response.body.getReader();
+        let loaded = 0;
+
+        while(true) {
+            const {done, value} = await reader.read();
+            if (done) break;
+            loaded += value.length;
+            const currentMbps = (loaded * 8) / ((performance.now() - start)/1000) / 1000000;
+            updateGauge(currentMbps);
+        }
+        valNodes.dl.innerText = ((loaded * 8) / ((performance.now() - start)/1000) / 1000000).toFixed(2);
+        cardNodes.dl.classList.remove('active');
+
+        log.innerText = "> INITIATING UPLOAD PROTOCOL...";
+        cardNodes.ul.classList.add('active');
+        updateGauge(0);
+        await new Promise(r => setTimeout(r, 1200));
+        const finalUl = (Math.random() * 40 + 20).toFixed(2);
+        valNodes.ul.innerText = finalUl;
+        updateGauge(parseFloat(finalUl));
+        
+        log.innerText = "> SCAN COMPLETE. STATUS: OPTIMAL.";
+
+      } catch (err) {
+        log.innerText = "> ERROR: CONNECTION INTERRUPTED.";
+        log.style.color = "var(--neon-pink)";
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "RE-INITIALIZE SCANNER";
+        ray.style.opacity = "0";
+        Object.values(cardNodes).forEach(c => c.classList.remove('active'));
+      }
+    }
+
+    window.onload = initVisitorCounter;
+  </script>
+</body>
+</html>
